@@ -107,7 +107,7 @@ def create_visited_wuhan(dataframe):
     dataframe["visited_Wuhan"] = dataframe.apply(lambda row: 1 if row['lives_in_Wuhan'] == 'yes' or (
             pd.notnull(row['travel_history_location']) and 'Wuhan' in row['travel_history_location']) else 0,
                                                  axis=1)
-    dataframe.drop(columns=['lives_in_Wuhan', 'travel_history_location'])
+    dataframe.drop(columns=['lives_in_Wuhan', 'travel_history_location'], inplace=True)
     print('Column visited_Wuhan created')
 
 
