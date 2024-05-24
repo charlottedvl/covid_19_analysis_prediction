@@ -1,63 +1,118 @@
+from datetime import datetime
+
 import pandas as pd
-from numpy import mean
 
 
-def analyze_csv(file_path):
-    # Lire le fichier CSV
-    df = pd.read_csv(file_path)
-
-    # Obtenir les noms des colonnes
-    column_names = df.columns.tolist()
-
-    # Déterminer les types des colonnes
-    column_types = df.dtypes.to_dict()
-
-    # Afficher les résultats
-    for column in column_names:
-        print(f"Colonne: {column}, Type: {column_types[column]}")
-
-
-def remove_empty_age_rows(input_file, output_file):
-    # Lire le fichier CSV
+def format_dataset(input_file, output_file):
     df = pd.read_csv(input_file)
-
-    # Supprimer les lignes où la colonne 'age' est vide (NaN)
-    df = df.dropna(subset=['age'])
-    df = df.dropna(subset=['outcome'])
-    df = df.dropna(subset=['date_confirmation'])
-
-    df = df.drop(columns=['source', 'chronic_disease', 'sequence_available', 'notes_for_discussion'])
-
-    # Sauvegarder le DataFrame nettoyé dans un nouveau fichier CSV
+    remove_rows(df)
+    remove_columns(df)
+    format_sex(df)
+    format_age(df)
+    format_dates(df, 'date_confirmation')
+    format_dates(df, 'date_onset_symptoms')
+    format_dates(df, 'date_admission_hospital')
+    format_dates(df, 'travel_history_dates')
+    format_dates(df, 'date_death_or_discharge')
+    format_chronic_disease_binary(df)
+    create_visited_wuhan(df)
+    format_outcome(df)
     df.to_csv(output_file, index=False)
 
 
-def compute_mean_age(input_file, output_file):
-    df = pd.read_csv(input_file)
+def remove_rows(dataframe):
+    dataframe.dropna(subset=['outcome'], inplace=True)
+    print('Rows removed')
 
-    for index, value in df['age'].items():
 
+def remove_columns(dataframe):
+    dataframe.drop(columns=['source', 'chronic_disease', 'sequence_available', 'notes_for_discussion', 'symptoms',
+                            'additional_information', 'reported_market_exposure', 'admin1', 'admin2', 'admin3',
+                            'admin_id', 'location', 'ID', 'city', 'country', 'province', 'geo_resolution',
+                            'data_moderator_initials', 'country_new', 'travel_history_binary', 'latitude',
+                            'longitude'], inplace=True)
+    print('Columns removed')
+
+
+def format_age(dataframe):
+    for index, value in dataframe['age'].items():
+        # If '-' is present, it means that the age is a range
         if '-' in str(value):
             try:
-                print(value + " " + str(index))
                 inferior_age, superior_age = map(int, value.split('-'))
                 if not superior_age:
-                    df.at[index, 'age'] = inferior_age
+                    dataframe.at[index, 'age'] = inferior_age
                 else:
-                    df.at[index, 'age'] = (inferior_age + superior_age) / 2
-                print(df.at[index, 'age'])
+                    dataframe.at[index, 'age'] = (inferior_age + superior_age) / 2
             except ValueError as e:
                 inferior_age = int(value[:2])
-                df.at[index, 'age'] = inferior_age
+                dataframe.at[index, 'age'] = inferior_age
+    print('Column age formatted')
 
-                print(f"Erreur de conversion des valeurs à la ligne {index}, value: {value}")
-    df.to_csv(output_file, index=False)
 
-def count_empty_lines_per_column(csv_file):
-    df = pd.read_csv(csv_file, delimiter=',')
-    total_rows = len(df)
-    empty_counts = df.isnull().sum()
-    print('nombre de lignes vides par colonnes: ')
-    print(empty_counts)
-    print('total de lignes : ')
-    print(total_rows)
+def format_sex(dataframe):
+    for index, value in dataframe['sex'].items():
+        if 'female' in str(value):
+            dataframe.at[index, 'sex'] = int(0)
+        elif 'male' in str(value):
+            dataframe.at[index, 'sex'] = int(1)
+        else:
+            dataframe.at[index, 'sex'] = None
+    print('Column sex formatted')
+
+
+def format_outcome(dataframe):
+    for index, value in dataframe['outcome'].items():
+        if any(substring in str(value).lower() for substring in ['death', 'dead', 'deceased', 'died']):
+            dataframe.at[index, 'outcome'] = 0
+        else:
+            dataframe.at[index, 'outcome'] = 1
+    print('Column outcome formatted')
+
+
+def format_dates(dataframe, column_name):
+    def parse_date(date_str):
+        try:
+            return datetime.strptime(date_str.strip(), "%d.%m.%Y")
+        except ValueError:
+            return None
+
+    def average_dates(date_str):
+        if '-' in date_str:
+            if ' - ' in date_str:
+                dates = date_str.split(' - ')
+            else:
+                dates = date_str.split('-')
+            date1 = parse_date(dates[0])
+            date2 = parse_date(dates[1])
+            if date1 and date2:
+                avg_date = date1 + (date2 - date1) / 2
+                return avg_date.timestamp()
+            elif date1:
+                return date1.timestamp()
+            elif date2:
+                return date2.timestamp()
+        else:
+            date = parse_date(date_str)
+            return date.timestamp() if date else None
+        return None
+
+    dataframe[column_name] = dataframe[column_name].apply(lambda x: average_dates(str(x)) if pd.notnull(x) else None)
+
+    print(
+        f"Column '{column_name}' formatted")
+
+
+def create_visited_wuhan(dataframe):
+    dataframe["visited_Wuhan"] = dataframe.apply(lambda row: 1 if row['lives_in_Wuhan'] == 'yes' or (
+            pd.notnull(row['travel_history_location']) and 'Wuhan' in row['travel_history_location']) else 0,
+                                                 axis=1)
+    dataframe.drop(columns=['lives_in_Wuhan', 'travel_history_location'])
+    print('Column visited_Wuhan created')
+
+
+def format_chronic_disease_binary(dataframe):
+    dataframe['chronic_disease_binary'] = dataframe.apply(
+        lambda row: 1 if str(row['chronic_disease_binary']) == 'True' else 0,
+        axis=1)
+    print('Column chronic_disease_binary formatted')
