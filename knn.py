@@ -17,17 +17,19 @@ def split_dataframe_by_outcome(input_file, output_file_1, output_file_2):
     df_hospitalized.to_csv(output_file_2, index=False)
 
 
-def suppress_outcomes_values(input_file):
+def suppress_values(input_file, column):
     df = pd.read_csv(input_file)
 
-    data = df.drop('outcome', axis=1)
-    outcomes = df['outcome']
-    return data, outcomes
+    data = df.drop(column, axis=1)
+    labels = df[column]
+    return data, labels
 
 
-def divide_into_training_and_test_data(input_file):
-    data, outcomes = suppress_outcomes_values(input_file)
-    data_train, data_test, label_train, label_test = train_test_split(data, outcomes, test_size=0.3, random_state=4)
+def divide_into_training_and_test_data(input_file, column, subset=None):
+    data, labels = suppress_values(input_file, column)
+    if subset is not None:
+        data = data[subset]
+    data_train, data_test, label_train, label_test = train_test_split(data, labels, test_size=0.3, random_state=4)
 
     imputer = SimpleImputer(strategy='most_frequent')
     data_train = imputer.fit_transform(data_train)
@@ -36,7 +38,6 @@ def divide_into_training_and_test_data(input_file):
     scaler = StandardScaler()
     data_train = scaler.fit_transform(data_train)
     data_test = scaler.transform(data_test)
-
     return data_train, data_test, label_train, label_test
 
 
@@ -52,7 +53,7 @@ def accuracy_model(predicted_values, actual_values):
 
 
 def choose_best_k(input_file, save_file):
-    data_train, data_test, outcomes_train, outcomes_test = divide_into_training_and_test_data(input_file)
+    data_train, data_test, outcomes_train, outcomes_test = divide_into_training_and_test_data(input_file, 'outcomes')
 
     accuracies = []
     # Iterate through different value of k
@@ -78,7 +79,6 @@ def choose_best_k(input_file, save_file):
     plt.ylabel('Accuracy Percentage')
     plt.scatter(best_k, max_accuracy, color='green', s=100)
     plt.text(best_k, max_accuracy, f'k={best_k}, Acc={max_accuracy:.2f}%', fontsize=12, verticalalignment='bottom')
-    plt.show()
     plt.savefig(save_file)
 
     print(f'Accuracy: {max_accuracy:.2f}' + "%")
