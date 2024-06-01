@@ -70,11 +70,11 @@ def format_outcome(dataframe):
             elif any(substring in str(value).lower() for substring in
                      ['recovered', 'recovering', 'discharged', 'discharge',
                       'released', 'not hospitalized']):
-                dataframe.at[index, 'outcome'] = 1
+                dataframe.at[index, 'outcome'] = 2
             else:
-                dataframe.at[index, 'outcome'] = 0.5
+                dataframe.at[index, 'outcome'] = 1
         except Exception as e:
-            dataframe.at[index, 'outcome'] = 0.5
+            dataframe.at[index, 'outcome'] = 1
     print('Column outcome formatted')
 
 
