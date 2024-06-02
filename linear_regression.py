@@ -5,22 +5,6 @@ from sklearn.metrics import mean_squared_error
 from format_data.process_data import divide_training_test_data
 
 
-def split_dataframe_by_age(input_file, output_file_age_null, output_file_age_not_null):
-    df = pd.read_csv(input_file)
-    df_age_null = df[df['age'].isnull()]
-    df_age_not_null = df[df['age'].notnull()]
-
-    df_age_null.to_csv(output_file_age_null, index=False)
-    df_age_not_null.to_csv(output_file_age_not_null, index=False)
-
-    correlation_matrix = df_age_not_null.corr()
-    correlation_with_age = correlation_matrix['age']
-    sorted_correlations = correlation_with_age.abs().sort_values(ascending=False)
-    most_correlated_features = sorted_correlations.index[1:3]
-    print(sorted_correlations)
-    return [most_correlated_features[0], most_correlated_features[1]]
-
-
 def create_model_linear_regression(input_file, subset):
     # Split the data into training and testing sets
     data_train, data_test, label_train, label_test = divide_training_test_data(input_file, 'age', subset)
@@ -39,22 +23,12 @@ def create_model_linear_regression(input_file, subset):
     return regression
 
 
-def split_by_age_and_clean(input_file, output_file_age_null, output_file_age_not_null):
+def find_features(input_file, column, number_of_features):
     df = pd.read_csv(input_file)
 
-    threshold = 0.9
-    cols_to_drop = df.columns[df.isna().mean() > threshold]
-    df.drop(cols_to_drop, axis=1, inplace=True)
+    correlation_matrix = df.corr()
+    correlation_with_age = correlation_matrix[column]
 
-    df_age_null = df[df['age'].isnull()]
-    df_age_not_null = df[df['age'].notnull()]
-
-    df_age_null.to_csv(output_file_age_null, index=False)
-    df_age_not_null.to_csv(output_file_age_not_null, index=False)
-    correlation_matrix = df_age_not_null.corr()
-    correlation_with_age = correlation_matrix['age']
     sorted_correlations = correlation_with_age.abs().sort_values(ascending=False)
-    most_correlated_features = sorted_correlations.index[1:5]
-    print(sorted_correlations)
-    return [most_correlated_features[0], most_correlated_features[1], most_correlated_features[2],
-            most_correlated_features[3]]
+    most_correlated_features = sorted_correlations.index[1:(number_of_features + 1)]
+    return most_correlated_features
