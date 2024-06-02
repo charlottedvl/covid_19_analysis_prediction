@@ -21,19 +21,6 @@ def conditional_probability(input_file, condition_columns, condition_values, tar
     return (observed_total / total) * 100
 
 
-def probability_true(input_file):
-    df = pd.read_csv(input_file)
-    observed_total = 0
-    total = 0
-    for index, value in df['date_confirmation'].items():
-        if pd.notnull(df.at[index, 'date_onset_symptoms']) and (pd.notnull(df.at[index, 'visited_Wuhan']) and
-                                                                df.at[index, 'visited_Wuhan'] == 1):
-            total += 1
-            if pd.notnull(value):
-                observed_total += 1
-    return (observed_total / total) * 100
-
-
 def create_bayesian_network(dataset_file):
     df = pd.read_csv(dataset_file)
     model = BayesianNetwork([('visited_Wuhan', 'have_symptoms'),
@@ -50,7 +37,7 @@ def create_bayesian_network(dataset_file):
 
 def prediction_recovery(input_file):
     df = pd.read_csv(input_file)
-
+    print("jello")
     observed_total = 0
     total = 0
 
