@@ -39,18 +39,10 @@ def prediction_recovery(input_file):
     df = pd.read_csv(input_file)
     observed_total = 0
     total = 0
-    for index, value in df['outcome'].items():
-        if pd.notnull(df.at[index, 'visited_Wuhan']) and df.at[index, 'visited_Wuhan'] == 1 and \
-                pd.notnull(df.at[index, 'date_death_or_discharge']) and pd.notnull(df.at[index, 'date_confirmation']):
-            if pd.notnull(value) and value == 2:
-                total += 1
-                date_diff = df.at[index, 'date_death_or_discharge'] - df.at[index, 'date_confirmation']
-                observed_total += date_diff
 
-    if total == 0:
-        return print("No data to calculate the average recovery time.")
+    filtered_df = df[df['visited_Wuhan'] == 1]
 
-    average_recovery_time = observed_total / total
+    average_recovery_time = filtered_df['recovery_time'].mean()
 
     mon, seconds = divmod(average_recovery_time, 60)
     hr, minutes = divmod(mon, 60)
