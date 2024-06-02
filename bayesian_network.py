@@ -37,20 +37,18 @@ def create_bayesian_network(dataset_file):
 
 def prediction_recovery(input_file):
     df = pd.read_csv(input_file)
-    print("jello")
     observed_total = 0
     total = 0
-
     for index, value in df['outcome'].items():
         if pd.notnull(df.at[index, 'visited_Wuhan']) and df.at[index, 'visited_Wuhan'] == 1 and \
                 pd.notnull(df.at[index, 'date_death_or_discharge']) and pd.notnull(df.at[index, 'date_confirmation']):
-            if pd.notnull(value) and value == 1:
+            if pd.notnull(value) and value == 2:
                 total += 1
                 date_diff = df.at[index, 'date_death_or_discharge'] - df.at[index, 'date_confirmation']
                 observed_total += date_diff
 
     if total == 0:
-        return "No data to calculate the average recovery time."
+        return print("No data to calculate the average recovery time.")
 
     average_recovery_time = observed_total / total
 
