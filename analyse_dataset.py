@@ -107,3 +107,9 @@ def plot_pca_projection(pca_df, save_file=None):
     else:
         plt.show()
 
+
+def variance_column(input_file, column):
+    df = pd.read_csv(input_file)
+    variance = df[column].var()
+    return print(f'The variance of the column {column} is {variance}')
+
