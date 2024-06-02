@@ -8,15 +8,14 @@ def format_dataset(input_file, output_file):
     remove_columns(df)
     format_sex(df)
     format_age(df)
-    format_dates(df, 'date_confirmation')
-    format_dates(df, 'date_admission_hospital')
-    format_dates(df, 'travel_history_dates')
-    format_dates(df, 'date_death_or_discharge')
+    dates_columns = ['date_confirmation', 'date_admission_hospital', 'travel_history_dates', 'date_death_or_discharge']
+    for column in dates_columns:
+        format_dates(df, column)
     format_chronic_disease_binary(df)
-    format_date_symptoms(df)
-    create_true_patient(df)
+    format_outcome_recovery_time(df)
+    format_rename_date_column(df, 'date_onset_symptoms', 'have_symptoms')
+    format_rename_date_column(df, 'date_confirmation', 'is_true_patient')
     create_visited_wuhan(df)
-    format_outcome(df)
     df.to_csv(output_file, index=False)
 
 
@@ -61,19 +60,24 @@ def format_sex(dataframe):
     print('Column sex formatted')
 
 
-def format_outcome(dataframe):
-    for index, value in dataframe['outcome'].items():
-        try:
-            if any(substring in str(value).lower() for substring in ['death', 'dead', 'deceased', 'died']):
-                dataframe.at[index, 'outcome'] = 0
-            elif any(substring in str(value).lower() for substring in
-                     ['recovered', 'recovering', 'discharged', 'discharge',
-                      'released', 'not hospitalized']):
-                dataframe.at[index, 'outcome'] = 2
-            else:
-                dataframe.at[index, 'outcome'] = 1
-        except Exception as e:
-            dataframe.at[index, 'outcome'] = 1
+def format_outcome_recovery_time(dataframe):
+    dataframe['outcome'] = dataframe['outcome'].astype(str).str.lower()
+
+    death_mask = dataframe['outcome'].str.contains('death|dead|deceased|died', na=False)
+    recovered_mask = dataframe['outcome'].str.contains(
+        'recovered|recovering|discharged|discharge|released|not hospitalized', na=False)
+    other_mask = ~death_mask & ~recovered_mask
+
+    dataframe.loc[death_mask, 'outcome'] = 0
+    dataframe.loc[recovered_mask, 'outcome'] = 2
+    dataframe.loc[other_mask, 'outcome'] = 1
+
+    valid_recovery_mask = dataframe['date_death_or_discharge'].notnull() & dataframe['date_confirmation'].notnull()
+    dataframe.loc[valid_recovery_mask, 'recovery_time'] = dataframe.loc[
+                                                              valid_recovery_mask, 'date_death_or_discharge'] - \
+                                                          dataframe.loc[valid_recovery_mask, 'date_confirmation']
+
+    dataframe.drop(columns=['date_death_or_discharge'], inplace=True)
     print('Column outcome formatted')
 
 
@@ -118,14 +122,14 @@ def create_visited_wuhan(dataframe):
     print('Column visited_Wuhan created')
 
 
-def format_date_symptoms(dataframe):
-    dataframe['date_onset_symptoms'] = dataframe.apply(
-        lambda row: 1 if pd.notnull(row['date_onset_symptoms']) else 0,
+def format_rename_date_column(dataframe, column, new_name):
+    dataframe[column] = dataframe.apply(
+        lambda row: 1 if pd.notnull(row[column]) else 0,
         axis=1)
     dataframe.rename(columns={
-        'date_onset_symptoms': 'have_symptoms'
+        column: new_name
     }, inplace=True)
-    print('Column date_onset_symptoms formatted')
+    print(f'Column {new_name} created')
 
 
 def format_chronic_disease_binary(dataframe):
@@ -133,9 +137,3 @@ def format_chronic_disease_binary(dataframe):
         lambda row: 1 if str(row['chronic_disease_binary']) == 'True' else 0,
         axis=1)
     print('Column chronic_disease_binary formatted')
-
-
-def create_true_patient(dataframe):
-    dataframe["is_true_patient"] = dataframe.apply(lambda row: 1 if pd.notnull(row['date_confirmation']) else 0, axis=1)
-    print('Column is_true_patient created')
-
