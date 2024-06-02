@@ -113,3 +113,8 @@ def variance_column(input_file, column):
     variance = df[column].var()
     return print(f'The variance of the column {column} is {variance}')
 
+
+def percentage_value_column(input_file, column):
+    df = pd.read_csv(input_file)
+    value_counts = df[column].value_counts(normalize=True) * 100
+    return print(value_counts)
