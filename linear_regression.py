@@ -7,7 +7,7 @@ from format_data.process_data import divide_training_test_data
 
 def create_model_linear_regression(input_file, subset):
     # Split the data into training and testing sets
-    data_train, data_test, label_train, label_test = divide_training_test_data(input_file, 'age', subset)
+    data_train, data_test, label_train, label_test = divide_training_test_data(input_file, 'age', subset=subset)
     data_train = pd.DataFrame(data_train, columns=subset)
     data_test = pd.DataFrame(data_test, columns=subset)
     label_train = pd.DataFrame(label_train, columns=['age'])
