@@ -76,32 +76,34 @@ def scatter_plots(file):
 def perform_pca(file):
     df = pd.read_csv(file)
 
-    # Impute missing values with the mode (most frequent value) of each column
     imputer = SimpleImputer(strategy='most_frequent')
     imputed_data = imputer.fit_transform(df)
 
-    # Scale the data
     scaler = StandardScaler()
     scaled_data = scaler.fit_transform(imputed_data)
 
-    # PCA
+    outcome = df['outcome']
+
     pca = PCA(n_components=2)
     pca_result = pca.fit_transform(scaled_data)
 
-    return pca_result
+    pca_df = pd.DataFrame(data=pca_result, columns=['PC1', 'PC2'])
+    pca_df['Outcome'] = outcome
+
+    return pca_df
 
 
-def plot_pca_projection(pca_result, save_file=None):
-    plt.figure(figsize=(8, 6))
-    plt.scatter(pca_result[:, 0], pca_result[:, 1], marker='.')
+def plot_pca_projection(pca_df, save_file=None):
+    plt.figure(figsize=(10, 8))
+    scatter = plt.scatter(pca_df['PC1'], pca_df['PC2'], c=pca_df['Outcome'], cmap='viridis')
     plt.xlabel('Principal Component 1')
     plt.ylabel('Principal Component 2')
-    plt.title('PCA Projection')
+    plt.colorbar(scatter, label='Outcome')
+    plt.title('PCA Projection with Outcomes')
 
     if save_file:
         plt.savefig(save_file)
         print(f'Plot saved as {save_file}')
     else:
         plt.show()
-
 

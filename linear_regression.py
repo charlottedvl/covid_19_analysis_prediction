@@ -1,15 +1,8 @@
 import pandas as pd
 from sklearn import linear_model
-from sklearn.compose import ColumnTransformer
-from sklearn.impute import SimpleImputer
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import mean_squared_error, r2_score
-from sklearn.model_selection import train_test_split
-from sklearn.pipeline import Pipeline
-from sklearn.preprocessing import StandardScaler, OneHotEncoder
+from sklearn.metrics import mean_squared_error
 
-from analyse_dataset import compute_correlation
-from knn import suppress_values, divide_into_training_and_test_data
+from knn import divide_into_training_and_test_data
 
 
 def split_dataframe_by_age(input_file, output_file_age_null, output_file_age_not_null):

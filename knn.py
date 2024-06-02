@@ -1,10 +1,9 @@
 import pandas as pd
-from matplotlib import pyplot as plt
 from sklearn.impute import SimpleImputer
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+from sklearn.metrics import confusion_matrix
 
 from plot.plot import plot_with_text
 

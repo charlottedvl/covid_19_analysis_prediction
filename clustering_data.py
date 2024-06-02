@@ -59,7 +59,8 @@ def plot_clusters(data, n_clusters, random_state, save_file):
 
     # Plot the clustered data
     plt.figure(figsize=(10, 6))
-    scatter = plt.scatter(pca_transformed_data[:, 0], pca_transformed_data[:, 1], c=cluster_labels, cmap='viridis', s=50)
+    scatter = plt.scatter(pca_transformed_data[:, 0], pca_transformed_data[:, 1], c=cluster_labels, cmap='viridis',
+                          s=50)
     plt.title('KMeans Clustering Results with PCA')
     plt.xlabel('PCA 1')
     plt.ylabel('PCA 2')
