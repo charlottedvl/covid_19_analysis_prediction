@@ -6,6 +6,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
+from plot.plot import plot_with_text
+
 
 def split_dataframe_by_outcome(input_file, output_file_1, output_file_2):
     df = pd.read_csv(input_file)
@@ -73,13 +75,11 @@ def choose_best_k(input_file, save_file):
     outcomes_pred = knn_model.predict(data_test)
 
     # Plot the results
-    plt.plot(range(1, 51), accuracies, color='blue', linestyle='dashed', markerfacecolor='red', markersize=10)
-    plt.title('Error Percentage for K in range(1, 51)')
-    plt.xlabel('K')
-    plt.ylabel('Accuracy Percentage')
-    plt.scatter(best_k, max_accuracy, color='green', s=100)
-    plt.text(best_k, max_accuracy, f'k={best_k}, Acc={max_accuracy:.2f}%', fontsize=12, verticalalignment='bottom')
-    plt.savefig(save_file)
+    x = range(1, 51)
+    title = 'Error Percentage for K in range(1, 51)'
+    x_label = 'K'
+    y_label = 'Accuracy Percentage'
+    plot_with_text(x, accuracies, title, x_label, y_label, best_k, max_accuracy, save_file)
 
     print(f'Accuracy: {max_accuracy:.2f}' + "%")
     confusion_matrix(outcomes_pred, outcomes_test)
