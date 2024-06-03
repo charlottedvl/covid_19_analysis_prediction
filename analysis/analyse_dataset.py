@@ -40,27 +40,52 @@ def compute_correlation(dataframe):
 
     print("Matrice de corrélation :")
     for col1 in correlation_matrix.columns:
-        for col2 in correlation_matrix.columns:
-            correlation_value = correlation_matrix.loc[col1, col2]
-            print(f"{col1} - {col2}: {correlation_value}")
+        if col1 == "outcome":
+            for col2 in correlation_matrix.columns:
+                if col2 != 'outcome':
+                    correlation_value = correlation_matrix.loc[col1, col2]
+                    print(f"{col1} - {col2}: {correlation_value}")
 
 
 def scatter_plots(dataframe):
     columns = dataframe.columns
 
     for column1 in columns:
-        with PdfPages(f'./data/scatter_plots/scatter_plot_{column1}.pdf') as pdf:
-            for column2 in columns:
-                if column1 == column2:
-                    continue
-                fig, ax = plt.subplots(figsize=(8, 6))
-                ax.scatter(dataframe[column1], dataframe[column2], marker='.')
-                ax.set_xlabel(column1)
-                ax.set_ylabel(column2)
-                plt.title(f'Scatter plot: {column1} vs {column2}')
-                pdf.savefig(fig)
-                plt.close(fig)
-        print(f'Saved scatter plots for {column1} in scatter_plot_{column1}.pdf')
+        if column1 == "outcome" or column1 == "age":
+            with PdfPages(f'./data/scatter_plots/scatter_plot_{column1}.pdf') as pdf:
+                for column2 in columns:
+                    if column1 == column2:
+                        continue
+
+                    # Check number of distinct values in both columns
+                    distinct_values_column2 = dataframe[column2].nunique()
+
+                    if column1 == 'age' or distinct_values_column2 > 4:
+                        fig, ax = plt.subplots(figsize=(8, 6))
+                        ax.scatter(dataframe[column1], dataframe[column2], marker='.')
+                        ax.set_xlabel(column1)
+                        ax.set_ylabel(column2)
+                        plt.title(f'Scatter plot: {column1} vs {column2}')
+                        pdf.savefig(fig)
+                        plt.close(fig)
+                    else:
+                        counts = dataframe.groupby([column1, column2]).size().reset_index(name='counts')
+                        total_count = counts['counts'].sum()
+                        counts['percentage'] = counts['counts'] / total_count * 100
+
+                        fig, ax = plt.subplots(figsize=(8, 6))
+                        ax.scatter(dataframe[column1], dataframe[column2], marker='.')
+                        # Add percentage
+                        for _, row in counts.iterrows():
+                            ax.annotate(f"{row['percentage']:.1f}%", (row[column1], row[column2]),
+                                        textcoords="offset points", xytext=(5, 5), ha='center')
+
+                        ax.set_xlabel(column1)
+                        ax.set_ylabel(column2)
+                        plt.title(f'Scatter plot: {column1} vs {column2}')
+                        pdf.savefig(fig)
+                        plt.close(fig)
+            print(f'Saved scatter plots for {column1} in scatter_plot_{column1}.pdf')
 
 
 def perform_pca(dataframe, features, save_file):
