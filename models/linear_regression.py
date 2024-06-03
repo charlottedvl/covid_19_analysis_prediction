@@ -21,14 +21,3 @@ def create_model_linear_regression(input_file, subset):
     mse = mean_squared_error(label_test, label_predicted)
     print(mse)
     return regression
-
-
-def find_features(input_file, column, number_of_features):
-    df = pd.read_csv(input_file)
-
-    correlation_matrix = df.corr()
-    correlation_with_age = correlation_matrix[column]
-
-    sorted_correlations = correlation_with_age.abs().sort_values(ascending=False)
-    most_correlated_features = sorted_correlations.index[1:(number_of_features + 1)]
-    return most_correlated_features
