@@ -15,7 +15,7 @@ def k_means(input_file, random_state, sample_size, save_plot_file, save_k_means_
     preprocessed_data = process_data('mean', df)
     # Sample so that silhouette_score performing is faster
     sample_data = create_sample_data(random_state, preprocessed_data, sample_size)
-    n_clusters = find_best_k(sample_data, random_state, save_plot_file)
+    n_clusters = find_best_n_clusters(sample_data, random_state, save_plot_file)
     plot_clusters(preprocessed_data, n_clusters, random_state, save_k_means_file)
 
 
@@ -26,7 +26,7 @@ def create_sample_data(random_state, data, sample_size):
     return data_sample
 
 
-def find_best_k(data, random_state, save_plot_file):
+def find_best_n_clusters(data, random_state, save_plot_file):
     silhouette_score_avg = []
     for n_clusters in range(2, 21):
         kmeans = KMeans(n_clusters=n_clusters, random_state=random_state)
