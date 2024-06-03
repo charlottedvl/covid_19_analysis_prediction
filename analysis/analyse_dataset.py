@@ -1,17 +1,16 @@
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_pdf import PdfPages
 from sklearn.decomposition import PCA
-from sklearn.impute import SimpleImputer
-from sklearn.preprocessing import StandardScaler
-
 import pandas as pd
+
+from format_data.process_data import process_data
 
 
 def analyze_dataset(csv_file, save_file=None):
     df = pd.read_csv(csv_file)
-    #empty_rows_by_column(df)
-    #compute_correlation(df)
-    #scatter_plots(df)
+    empty_rows_by_column(df)
+    compute_correlation(df)
+    scatter_plots(df)
     features = find_most_correlated(csv_file, 'outcome', 4)
     perform_pca(df, features, save_file)
 
@@ -66,17 +65,12 @@ def scatter_plots(dataframe):
 
 def perform_pca(dataframe, features, save_file):
     feature_data = dataframe[features]
-
-    imputer = SimpleImputer(strategy='most_frequent')
-    imputed_data = imputer.fit_transform(feature_data)
-
-    scaler = StandardScaler()
-    scaled_data = scaler.fit_transform(imputed_data)
+    processed_data = process_data('most_frequent', feature_data)
 
     outcome = dataframe['outcome']
 
     pca = PCA(n_components=2)
-    pca_result = pca.fit_transform(scaled_data)
+    pca_result = pca.fit_transform(processed_data)
 
     pca_df = pd.DataFrame(data=pca_result, columns=['PC1', 'PC2'])
     pca_df['Outcome'] = outcome
