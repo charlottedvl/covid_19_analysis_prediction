@@ -35,14 +35,14 @@ def empty_rows_by_column(dataframe):
     print(total_rows)
 
 
-def compute_correlation(dataframe):
+def compute_correlation(dataframe, column):
     correlation_matrix = dataframe.corr()
 
     print("Matrice de corrélation :")
     for col1 in correlation_matrix.columns:
-        if col1 == "outcome":
+        if col1 == column:
             for col2 in correlation_matrix.columns:
-                if col2 != 'outcome':
+                if col2 != col1:
                     correlation_value = correlation_matrix.loc[col1, col2]
                     print(f"{col1} - {col2}: {correlation_value}")
 
