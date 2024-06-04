@@ -13,9 +13,11 @@ def get_distinct_values(input_file, column_name):
         print(f"{value}: {count} occurrences")
 
 
-def variance_column(input_file, column):
+def analyse_column(input_file, column):
     df = pd.read_csv(input_file)
     variance = df[column].var()
+    mean = df[column].mean()
+    print(f'The mean of the column {column} is {mean}')
     return print(f'The variance of the column {column} is {variance}')
 
 
