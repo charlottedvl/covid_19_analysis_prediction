@@ -1,7 +1,5 @@
 import pandas as pd
 from sklearn.cluster import KMeans
-from sklearn.linear_model import LinearRegression
-from sklearn.metrics import silhouette_score
 from sklearn.model_selection import GridSearchCV
 from sklearn.neighbors import KNeighborsClassifier
 
