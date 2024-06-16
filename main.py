@@ -13,14 +13,14 @@ from models.linear_regression import create_model_linear_regression
 # Dataset's files path
 original_dataset_file = './data/latestdata.csv'
 cleaned_file = './data/cleaned_dataset.csv'
-dead_discharged_file = 'data/knn/dead_discharged_dataset.csv'
-hospitalized_file = 'data/knn/hospitalized_dataset.csv'
-hospitalized_outcomes_predicted_file = 'data/knn/hospitalized_outcomes_predicted.csv'
-age_null_file = 'data/linear_regression_datasets/age_null_dataset.csv'
-age_not_null_file = 'data/linear_regression_datasets/age_not_null_dataset.csv'
-age_null_cleaned_file = 'data/linear_regression_datasets/age_null_cleaned_dataset.csv'
-age_not_null_cleaned_file = 'data/linear_regression_datasets/age_not_null_cleaned_dataset.csv'
-predicted_age_file = 'data/linear_regression_datasets/predicted_age.csv'
+dead_discharged_file = 'data/knn/datasets/dead_discharged_dataset.csv'
+hospitalized_file = 'data/knn/datasets/hospitalized_dataset.csv'
+hospitalized_outcomes_predicted_file = 'data/knn/datasets/hospitalized_outcomes_predicted.csv'
+age_null_file = 'data/linear_regression/datasets/age_null_dataset.csv'
+age_not_null_file = 'data/linear_regression/datasets/age_not_null_dataset.csv'
+age_null_cleaned_file = 'data/linear_regression/datasets/age_null_cleaned_dataset.csv'
+age_not_null_cleaned_file = 'data/linear_regression/datasets/age_not_null_cleaned_dataset.csv'
+predicted_age_file = 'data/linear_regression/datasets/predicted_age.csv'
 
 # Plot file
 pca_plot_file = 'data/analysis/pca_plot.png'

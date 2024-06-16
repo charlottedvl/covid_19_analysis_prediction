@@ -1,8 +1,4 @@
 # Analysis on a Covid-19 dataset
-``` python
-print("No path found")
-return None
-```
 ## Table of content 
 
 - [Context](#context)
@@ -91,8 +87,9 @@ We can notice that the repartition is quite similar.
 
 ### Linear regression model
 
-We have 272947 patients who don't have an age, while it is important information for a person. 
-We use a linear regression model to predict the age of the patients. 
+There are 272947 patients who don't have an age, while it is important information for a person. 
+We use a linear regression model to predict the age of the patients.
 
+We perform a first linear regression and compute the mean square error:
 
-
+![Mean square error](data/linear_regression/)
