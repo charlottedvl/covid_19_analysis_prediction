@@ -90,6 +90,26 @@ We can notice that the repartition is quite similar.
 There are 272947 patients who don't have an age, while it is important information for a person. 
 We use a linear regression model to predict the age of the patients.
 
-We perform a first linear regression and compute the mean square error:
+We perform a first linear regression using only the two features that are most correlated with age 
+and compute the mean square error:
 
-![Mean square error](data/linear_regression/)
+![Mean square error](data/linear_regression/mean_square_error.png)
+
+As the score is not that good, we try to improve it. To do so, we suppress columns that have more
+than 90% of missing values and choose the 3 most correlated features. 
+This allows us to improve the mean square error score that we have.
+
+![Mean square error improved](data/linear_regression/mean_square_error_improved.png)
+
+This helps us to get better results but if we look closely, we could see that the variance of the
+predicted age is very low and most predicted age are around 33 years old.
+Some improvements can still be made to get better results. 
+
+![Analysis on the predicted age](data/linear_regression/analysis_regression.png)
+
+### K-Means
+
+Now, we want to separate the data in clusters. To do so, we use the K-Means model. 
+We analyze our results with the silhouette score of the clustering. We obtain 0.99 which is pretty good.
+
+![Clusters](data/k_means/k_means_plot.png)
