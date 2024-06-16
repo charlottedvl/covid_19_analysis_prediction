@@ -38,7 +38,7 @@ We also create scatter plots concerning the features 'outcome' and 'age' and can
 Finally, we perform a PCA restraining to the features most correlated to the target value: the outcome. 
 
 <p align="center">
-  <img src="data/analysis/pca_plot.png" alt="PCA plot" />
+  <img height="220" src="data/analysis/pca_plot.png" alt="PCA plot" />
 </p>
 
 ## Machine Learning models
@@ -53,7 +53,7 @@ More information about each model in the [model README](models/README_models.md)
 First, we are going to compute some probabilities thanks to the following Bayesian Network. 
 
 <p align="center">
-  <img height="200" src="data/bayesian_network/bayesian_network.png" alt="Bayesian Network used" />
+  <img height="250" src="data/bayesian_network/bayesian_network.png" alt="Bayesian Network used" />
 </p>
 
 We compute the probability for someone to have symptoms if the person visited Wuhan:  
@@ -140,5 +140,5 @@ Now, we want to separate the data in clusters. To do so, we use the K-Means mode
 We analyze our results with the silhouette score of the clustering. We obtain 0.99 which is pretty good.
 
 <p align="center">
-  <img src="data/k_means/k_means_plot.png" alt="Clusters" />
+  <img height="220" src="data/k_means/k_means_plot.png" alt="Clusters" />
 </p>
