@@ -53,7 +53,7 @@ More information about each model in the [model README](models/README_models.md)
 First, we are going to compute some probabilities thanks to the following Bayesian Network. 
 
 <p align="center">
-  <img height="150" src="data/bayesian_network/bayesian_network.png" alt="Bayesian Network used" />
+  <img height="200" src="data/bayesian_network/bayesian_network.png" alt="Bayesian Network used" />
 </p>
 
 We compute the probability for someone to have symptoms if the person visited Wuhan:  
@@ -92,7 +92,7 @@ We train our model with the first dataset and test the accuracy and the confusio
 We obtain: 
 
 <p align="center">
-  <img height="200" src="data/knn/accuracy_confusion_matrix.png" alt="Average recovery time if visited Wuhan" />
+  <img height="100" src="data/knn/accuracy_confusion_matrix.png" alt="Average recovery time if visited Wuhan" />
 </p>
 
 Then, we use our model to predict the outcomes of the dataset composed of hospitalized patients. 
@@ -100,8 +100,8 @@ We can compare the repartition of death and recovery predicted by the model with
 As a reminder, 0 is death and 2 recovery. We obtain:
 
 <p align="center">
-  <img height="200" src="data/knn/outcomes.png" alt="Actual outcomes" />
-  <img height="200" src="data/knn/predicted_outcomes.png" alt="Outcomes predicted by the model" />
+  <img height="100" src="data/knn/outcomes.png" alt="Actual outcomes" style="margin-right: 10px;" />
+  <img height="100" src="data/knn/predicted_outcomes.png" alt="Outcomes predicted by the model" />
 </p>
 
 We can notice that the repartition is quite similar. 
