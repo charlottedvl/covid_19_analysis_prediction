@@ -18,8 +18,9 @@ Unfortunately, all columns are not usable in the actual state, as most of them a
 The objective is to format the data so that performing the analysis becomes simpler. We then work with the [cleaned dataset](data/cleaned_dataset.csv).
 The final cleaned dataset has 307382 rows and the following features:
 
-<img height=200 align="center" src="data/analysis/empty_rows_cleaned_dataset.png" alt="Cleaned dataset analysis" />
-
+<p align="center">
+  <img height="200" src="data/analysis/empty_rows_cleaned_dataset.png" alt="Cleaned dataset analysis" />
+</p>
 
 More information about how the dataset have been formatting can be found here: [the format data markdown](format_data/README_formatting.md).
 
@@ -28,13 +29,17 @@ More information about how the dataset have been formatting can be found here: [
 Now that our dataset is ready to be used, we can perform multiple analysis on it. 
 We choose to compute a correlation matrix, focusing on the target feature: the outcome of the patient.  
 
-![Correlation matrix](data/analysis/correlation_matrix.png)
+<p align="center">
+  <img height="200" src="data/analysis/correlation_matrix.png" alt="Correlation matrix" />
+</p>
 
 We also create scatter plots concerning the features 'outcome' and 'age' and can be found here: [scatter plots](data/scatter_plots).
 
 Finally, we perform a PCA restraining to the features most correlated to the target value: the outcome. 
 
-![PCA plot](data/analysis/pca_plot.png)
+<p align="center">
+  <img src="data/analysis/pca_plot.png" alt="PCA plot" />
+</p>
 
 ## Machine Learning models
 
@@ -47,24 +52,35 @@ More information about each model in the [model README](models/README_models.md)
 
 First, we are going to compute some probabilities thanks to the following Bayesian Network. 
 
-![Bayesian Network used](data/bayesian_network/bayesian_network.png)
+<p align="center">
+  <img height="150" src="data/bayesian_network/bayesian_network.png" alt="Bayesian Network used" />
+</p>
 
 We compute the probability for someone to have symptoms if the person visited Wuhan:  
 
+<p align="center">
+  <img height="150" src="data/bayesian_network/have_symptoms_visited_wuhan.png" alt="P(having_symptoms | visited_Wuhan = yes)" />
+</p>
 ![P(having_symptoms | visited_Wuhan = yes)](data/bayesian_network/have_symptoms_visited_wuhan.png)
 
 The probability for someone to have symptoms if the person visited Wuhan: 
 
-![P(true_patient | visited_Wuhan = yes, have_symptoms = yes)](data/bayesian_network/true_patient_visited_wuhan_have_symptoms.png)
+<p align="center">
+  <img height="200" src="data/bayesian_network/true_patient_visited_wuhan_have_symptoms.png" alt="P(true_patient | visited_Wuhan = yes, have_symptoms = yes)" />
+</p>
 
 And the probability for a person to be a true patient if this person has symptoms of
 COVID-19 and this person visited Wuhan:  
 
-![P(die | visited_Wuhan = yes)](data/bayesian_network/outcome_visited_wuhan.png)
+<p align="center">
+  <img height="200" src="data/bayesian_network/outcome_visited_wuhan.png" alt="P(die | visited_Wuhan = yes)" />
+</p>
 
 We can also predict the average recovery interval for a patient if this person visited Wuhan:
 
-![Average recovery time if visited Wuhan](data/bayesian_network/average_recovery_time.png)
+<p align="center">
+  <img src="data/bayesian_network/average_recovery_time.png" alt="Average recovery time if visited Wuhan" />
+</p>
 
 ### K-Nearest-Neighbors (KNN)
 
@@ -75,14 +91,18 @@ one for patients whose outcome is known, one for those whose outcome isn't known
 We train our model with the first dataset and test the accuracy and the confusion matrix on the results obtained with this dataset. 
 We obtain: 
 
-![Average recovery time if visited Wuhan](data/bayesian_network/average_recovery_time.png)
+<p align="center">
+  <img height="200" src="data/knn/accuracy_confusion_matrix.png" alt="Average recovery time if visited Wuhan" />
+</p>
 
 Then, we use our model to predict the outcomes of the dataset composed of hospitalized patients. 
 We can compare the repartition of death and recovery predicted by the model with the actual proportion of the first dataset. 
 As a reminder, 0 is death and 2 recovery. We obtain:
 
-![Actual outcomes](data/knn/outcomes.png)
-![Outcomes predicted by the model](data/knn/predicted_outcomes.png)
+<p align="center">
+  <img height="200" src="data/knn/outcomes.png" alt="Actual outcomes" />
+  <img height="200" src="data/knn/predicted_outcomes.png" alt="Outcomes predicted by the model" />
+</p>
 
 We can notice that the repartition is quite similar. 
 
@@ -94,23 +114,31 @@ We use a linear regression model to predict the age of the patients.
 We perform a first linear regression using only the two features that are most correlated with age 
 and compute the mean square error:
 
-![Mean square error](data/linear_regression/mean_square_error.png)
+<p align="center">
+  <img width="200" src="data/linear_regression/mean_square_error.png" alt="Mean square error" />
+</p>
 
 As the score is not that good, we try to improve it. To do so, we suppress columns that have more
 than 90% of missing values and choose the 3 most correlated features. 
 This allows us to improve the mean square error score that we have.
 
-![Mean square error improved](data/linear_regression/mean_square_error_improved.png)
+<p align="center">
+  <img width="200" src="data/linear_regression/mean_square_error_improved.png" alt="Mean square error improved" />
+</p>
 
 This helps us to get better results but if we look closely, we could see that the variance of the
 predicted age is very low and most predicted age are around 33 years old.
 Some improvements can still be made to get better results. 
 
-![Analysis on the predicted age](data/linear_regression/analysis_regression.png)
+<p align="center">
+  <img src="data/linear_regression/analysis_regression.png" alt="Analysis on the predicted age" />
+</p>
 
 ### K-Means
 
 Now, we want to separate the data in clusters. To do so, we use the K-Means model. 
 We analyze our results with the silhouette score of the clustering. We obtain 0.99 which is pretty good.
 
-![Clusters](data/k_means/k_means_plot.png)
+<p align="center">
+  <img src="data/k_means/k_means_plot.png" alt="Clusters" />
+</p>
