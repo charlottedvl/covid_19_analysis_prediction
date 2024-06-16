@@ -18,7 +18,8 @@ Unfortunately, all columns are not usable in the actual state, as most of them a
 The objective is to format the data so that performing the analysis becomes simpler. We then work with the [cleaned dataset](data/cleaned_dataset.csv).
 The final cleaned dataset has 307382 rows and the following features:
 
-![Cleaned dataset analysis](data/analysis/empty_rows_cleaned_dataset.png)
+<img height=200 align="center" src="data/analysis/empty_rows_cleaned_dataset.png" alt="Cleaned dataset analysis" />
+
 
 More information about how the dataset have been formatting can be found here: [the format data markdown](format_data/README_formatting.md).
 
