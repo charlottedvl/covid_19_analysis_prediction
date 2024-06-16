@@ -79,7 +79,7 @@ COVID-19 and this person visited Wuhan:
 We can also predict the average recovery interval for a patient if this person visited Wuhan:
 
 <p align="center">
-  <img src="data/bayesian_network/average_recovery_time.png" alt="Average recovery time if visited Wuhan" />
+  <img width="500" src="data/bayesian_network/average_recovery_time.png" alt="Average recovery time if visited Wuhan" />
 </p>
 
 ### K-Nearest-Neighbors (KNN)
@@ -131,7 +131,7 @@ predicted age is very low and most predicted age are around 33 years old.
 Some improvements can still be made to get better results. 
 
 <p align="center">
-  <img src="data/linear_regression/analysis_regression.png" alt="Analysis on the predicted age" />
+  <img width="700" src="data/linear_regression/analysis_regression.png" alt="Analysis on the predicted age" />
 </p>
 
 ### K-Means
