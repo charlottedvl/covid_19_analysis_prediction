@@ -61,7 +61,6 @@ We compute the probability for someone to have symptoms if the person visited Wu
 <p align="center">
   <img height="150" src="data/bayesian_network/have_symptoms_visited_wuhan.png" alt="P(having_symptoms | visited_Wuhan = yes)" />
 </p>
-![P(having_symptoms | visited_Wuhan = yes)](data/bayesian_network/have_symptoms_visited_wuhan.png)
 
 The probability for someone to have symptoms if the person visited Wuhan: 
 
