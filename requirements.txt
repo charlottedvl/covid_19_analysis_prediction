@@ -2,5 +2,5 @@ matplotlib
 numpy
 pandas
 pgmpy
-sklearn
+scikit-learn
 datetime
